@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 # دالة اضافة
 def add_amount(amount):
-    amont=float(input("المبلغ ادخل(("))
-    input=category
+    amont=float(input("المبلغ ادخل"))
+    category=input("ادخل الصنف")
     date=dt.datetime.now().strftime("%Y-%m-%d,%I:%M")
     ["المصروفات","الفئة","التاريخ"]=d
     amount.append({"التاريخ": date,"الفئة":category,"المصروفات":amont,})
