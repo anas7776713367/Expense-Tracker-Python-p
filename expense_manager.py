@@ -1,60 +1,67 @@
-import numpy as np 
-import pandas as pd  
+import numpy as np
+import pandas as pd
 import datetime as dt
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 
+# دالة اضافة
 def add_amount(amount):
-    amont=float(input("ادخل المبلغ"))
-    category=input("ادخل الفئة")
+    amont=float(input("المبلغ ادخل(("))
+    input=category
     date=dt.datetime.now().strftime("%Y-%m-%d,%I:%M")
-    amount.append({"التاريخ": date,"الفئة":category,"المصروفات":amont})
+    ["المصروفات","الفئة","التاريخ"]=d
+    amount.append({"التاريخ": date,"الفئة":category,"المصروفات":amont,})
+    data=pd.DataFrame(columns=d)
+    data.to_csv("data.csv",index=False)
 
-# دالة لحفظ البيانات في ملف csv 
+# csv دالة لحفظ البانات في ملف
 def save_data(amount):
-    data=pd.DataFrame(amount,columns=["الفئة","التاريخ","المصروفات"])
-    data.to_csv("ملف_بيانات_ادارة_الحسابات.csv",index=False,encoding="utf-8-sig",mode="a",header=False)
-    
-# دالة لعرض البيانات
-def vew_amount(amount):
-    data_read=pd.read_csv(r"ملف_بيانات_ادارة_الحسابات.csv")
-    data_read.drop_duplicates(inplace=True)
-    print(data_read)
+    data=pd.DataFrame(amount)
+    file=data.to_csv("data.csv",index=False,encoding="utf-8-sig",mode="a",header=False)
 
-# دالة لحساب اجمالي المصروفات  
+# دالة لعرض البانات
+def vew_amount(amount):
+    # data_read=pd.read_csv(r"الحسابات_ادارة_بيانات_ملف.csv")
+    data_read=pd.read_csv(r"data.csv")
+    data_read.drop_duplicates(inplace=True)
+    display(data_read)
+
+# دالة لحساب اجملي المصروفات
 def total_amount():
-    data_read=pd.read_csv(r"ملف_بيانات_ادارة_الحسابات.csv")
-    return data_read["المصروفات"].sum()
+    data_read=pd.read_csv(r"data.csv")
+    return data_read["المصروفات["].sum()
 
 # دالة لتوضيح رسم البيانات
 def graphcal():
-    data=pd.read_csv(r"ملف_بيانات_ادارة_الحسابات.csv")
-    label=data["الفئة"]
-    data.groupby("الفئة")["المصروفات"].sum().plot(kind="pie",autopct="%1.1f%%")
-    plt.xlabel("المصروفات")
-    plt.ylabel("المصروفات")
+    data=pd.read_csv(r"data.csv")
+    label=data["الفئة["]
+    data.groupby("الفئة")("المصروفات[".sum().plot(kind="pie",autopct="%1.1f%%")
+    plt.legend()
+    plt.xlabel("المصروفات(")
+    plt.ylabel("الفئات(")
     plt.grid(True)
     plt.show()
-    plt.bar(data["الفئة"],data["المصروفات"])
-    plt.xlabel("الفئة")
-    plt.ylabel("المصروفات")
+    plt.bar(data["الفئة["],data["المصروفات["],width=0.1)
+    plt.xlabel("الفئة(")
+    plt.ylabel("المصروفات(")
     plt.grid(True)
     plt.show()
 
 amount=[]
-print("1:الرقم واحد للاضافة\n", "2:الرقم اثنين للحفظ\n", "3:الرقم ثلاثة لعرض البيانات\n", "4:الرقم اربعة لعرض اجمالي المصروفات\n", "5:الرقم خمسة لتوضيح رسم البيانات\n", "6:الرقم ستة للخروج من البرنامج")
+print("الرقم واحد لالضافة1:","n\الرقم اثنين للحفظ2:","n\الرقم ثالثة لعرض البيانات3:","n\الرقم اربعة لعرض اجمالي المصروفات4:")
+print("الرقم خمسة لتوضيح رسم البيانات5:","n\الرقم ستة للخروج من البرنامج6:")
 
 while True:
-    n=input("اختار نوع العملية")
+    n=input("ادخل نوع العملية")
     if n=="1":
         add_amount(amount)
     if n=="2":
         save_data(amount)
-    if n=="3": 
+    if n=="3":
         vew_amount(amount)
     if n=="4":
-        print("اجمالي المصروفات", total_amount()) 
+        print("المصروفات اجمالي",total_amount())
     if n=="5":
         graphcal()
     if n=="6":
         break
-        
+    
