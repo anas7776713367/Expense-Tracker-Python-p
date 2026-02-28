@@ -8,7 +8,7 @@ def add_amount(amount):
     amont=float(input("المبلغ ادخل"))
     category=input("ادخل الصنف")
     date=dt.datetime.now().strftime("%Y-%m-%d,%I:%M")
-    ["المصروفات","الفئة","التاريخ"]=d
+    d=["التاريخ","الفئة","المصروفات"]
     amount.append({"التاريخ": date,"الفئة":category,"المصروفات":amont,})
     data=pd.DataFrame(columns=d)
     data.to_csv("data.csv",index=False)
@@ -28,21 +28,21 @@ def vew_amount(amount):
 # دالة لحساب اجملي المصروفات
 def total_amount():
     data_read=pd.read_csv(r"data.csv")
-    return data_read["المصروفات["].sum()
+    return data_read["المصروفات"].sum()
 
 # دالة لتوضيح رسم البيانات
 def graphcal():
     data=pd.read_csv(r"data.csv")
-    label=data["الفئة["]
-    data.groupby("الفئة")("المصروفات[".sum().plot(kind="pie",autopct="%1.1f%%")
+   
+    data.groupby("الفئة")["المصروفات"].sum().plot(kind="pie",autopct="%1.1f%%")
     plt.legend()
-    plt.xlabel("المصروفات(")
-    plt.ylabel("الفئات(")
+    plt.xlabel("المصروفات")
+    plt.ylabel("الفئات")
     plt.grid(True)
     plt.show()
-    plt.bar(data["الفئة["],data["المصروفات["],width=0.1)
-    plt.xlabel("الفئة(")
-    plt.ylabel("المصروفات(")
+    plt.bar(data["الفئة"],data["المصروفات"],width=0.1)
+    plt.xlabel("الفئة")
+    plt.ylabel("المصروفات")
     plt.grid(True)
     plt.show()
 
@@ -59,9 +59,8 @@ while True:
     if n=="3":
         vew_amount(amount)
     if n=="4":
-        print("المصروفات اجمالي",total_amount())
+        print("  اجمالي المصروفات",total_amount())
     if n=="5":
         graphcal()
     if n=="6":
         break
-    
