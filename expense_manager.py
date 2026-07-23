@@ -1,66 +1,137 @@
-import numpy as np
+import os
 import pandas as pd
 import datetime as dt
 import matplotlib.pyplot as plt
 
-# دالة اضافة
-def add_amount(amount):
-    amont=float(input("المبلغ ادخل"))
-    category=input("ادخل الصنف")
-    date=dt.datetime.now().strftime("%Y-%m-%d,%I:%M")
-    d=["التاريخ","الفئة","المصروفات"]
-    amount.append({"التاريخ": date,"الفئة":category,"المصروفات":amont,})
-    data=pd.DataFrame(columns=d)
-    data.to_csv("data.csv",index=False)
+FILE_NAME = "data.csv"
 
-# csv دالة لحفظ البانات في ملف
-def save_data(amount):
-    data=pd.DataFrame(amount)
-    file=data.to_csv("data.csv",index=False,encoding="utf-8-sig",mode="a",header=False)
 
-# دالة لعرض البانات
-def vew_amount(amount):
-    # data_read=pd.read_csv(r"الحسابات_ادارة_بيانات_ملف.csv")
-    data_read=pd.read_csv(r"data.csv")
-    data_read.drop_duplicates(inplace=True)
-    display(data_read)
+# Create the file if it does not exist
+def create_file():
+    if not os.path.exists(FILE_NAME):
+        columns = ["Date", "Category", "Expense"]
+        pd.DataFrame(columns=columns).to_csv(
+            FILE_NAME,
+            index=False,
+            encoding="utf-8-sig"
+        )
 
-# دالة لحساب اجملي المصروفات
+
+# Add a new expense
+def add_amount():
+
+    try:
+        amount = float(input("Enter the amount: "))
+    except ValueError:
+        print("❌ The amount must be a number.")
+        return
+
+    category = input("Enter the category: ")
+
+    date = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    new_data = pd.DataFrame([{
+        "Date": date,
+        "Category": category,
+        "Expense": amount
+    }])
+
+    new_data.to_csv(
+        FILE_NAME,
+        mode="a",
+        header=False,
+        index=False,
+        encoding="utf-8-sig"
+    )
+
+    print("✅ Expense added successfully.")
+
+
+# Display all expenses
+def view_amount():
+
+    data = pd.read_csv(FILE_NAME)
+
+    if data.empty:
+        print("No data available.")
+    else:
+        print(data)
+
+
+# Calculate total expenses
 def total_amount():
-    data_read=pd.read_csv(r"data.csv")
-    return data_read["المصروفات"].sum()
 
-# دالة لتوضيح رسم البيانات
-def graphcal():
-    data=pd.read_csv(r"data.csv")
-   
-    data.groupby("الفئة")["المصروفات"].sum().plot(kind="pie",autopct="%1.1f%%")
-    plt.legend()
-    plt.xlabel("المصروفات")
-    plt.ylabel("الفئات")
-    plt.grid(True)
-    plt.show()
-    plt.bar(data["الفئة"],data["المصروفات"],width=0.1)
-    plt.xlabel("الفئة")
-    plt.ylabel("المصروفات")
-    plt.grid(True)
+    data = pd.read_csv(FILE_NAME)
+
+    print(f"\nTotal Expenses = {data['Expense'].sum():.2f}")
+
+
+# Display charts
+def graphical():
+
+    data = pd.read_csv(FILE_NAME)
+
+    if data.empty:
+        print("No data available for plotting.")
+        return
+
+    # Pie Chart
+    data.groupby("Category")["Expense"].sum().plot(
+        kind="pie",
+        autopct="%1.1f%%",
+        figsize=(6, 6)
+    )
+
+    plt.title("Expense Distribution by Category")
+    plt.ylabel("")
     plt.show()
 
-amount=[]
-print("الرقم واحد لالضافة1:","n\الرقم اثنين للحفظ2:","n\الرقم ثالثة لعرض البيانات3:","n\الرقم اربعة لعرض اجمالي المصروفات4:")
-print("الرقم خمسة لتوضيح رسم البيانات5:","n\الرقم ستة للخروج من البرنامج6:")
+    # Bar Chart
+    data.groupby("Category")["Expense"].sum().plot(
+        kind="bar",
+        figsize=(7, 5)
+    )
+
+    plt.title("Total Expenses by Category")
+    plt.xlabel("Category")
+    plt.ylabel("Amount")
+    plt.grid(axis="y")
+    plt.show()
+
+
+# ----------------------------
+
+create_file()
 
 while True:
-    n=input("ادخل نوع العملية")
-    if n=="1":
-        add_amount(amount)
-    if n=="2":
-        save_data(amount)
-    if n=="3":
-        vew_amount(amount)
-    if n=="4":
-        print("  اجمالي المصروفات",total_amount())
-    if n=="5":
-        graphcal()
-    if n=="6":
+
+    print("""
+========== Expense Management ==========
+1- Add Expense
+2- View Expenses
+3- Total Expenses
+4- Show Charts
+5- Exit
+========================================
+""")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        add_amount()
+
+    elif choice == "2":
+        view_amount()
+
+    elif choice == "3":
+        total_amount()
+
+    elif choice == "4":
+        graphical()
+
+    elif choice == "5":
+        print("Program terminated.")
         break
+
+    else:
+        print("❌ Invalid choice.")
